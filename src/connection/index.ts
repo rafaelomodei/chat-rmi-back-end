@@ -32,7 +32,6 @@ const connection = server.ioConnection.on("connection", (socket) => {
 
   socket.on("login", (data: IDataLogin) => {
     const userFound = serviceUser.findUserByEmail(data.email);
-
     if (!userFound) {
       socket.emit("login", {
         status: 404,
@@ -45,6 +44,7 @@ const connection = server.ioConnection.on("connection", (socket) => {
         data.password,
         userFound.password && userFound.password
       );
+
       if (!userLogin) {
         socket.emit("login", {
           status: 404,
@@ -52,6 +52,7 @@ const connection = server.ioConnection.on("connection", (socket) => {
         });
       } else {
         // if userFound
+        console.log("Successfully logged in")
         socket.emit("login", {
           status: 200,
           message: "User logged",
@@ -62,14 +63,13 @@ const connection = server.ioConnection.on("connection", (socket) => {
   });
 
   socket.on("registerContact", (data: IDataRegContact) => {
-    if (!serviceUser.findUserByEmail(data.userEmail)) {
+    if (!serviceUser.findUserByEmail(data.userAuth)) {
       socket.emit("registerContact", {
         status: 404,
         message: "User not found",
       });
     } else {
       const saveContact = serviceUser.insertContact(data);
-
       socket.emit("registerContact", saveContact);
     }
   });
@@ -88,13 +88,15 @@ const connection = server.ioConnection.on("connection", (socket) => {
   });
 
   socket.on("getAllList", (data: IDataAuth) => {
-    const user: IUser = serviceUser.findUserByEmail(data.email);
+    const user = serviceUser.findUserByEmail(data.email);
+    console.log("-> ", user);
     if (!user) {
       socket.emit("getAllList", {
         status: 404,
         message: "User not found",
       });
     } else {
+      console.log("oi");
       socket.emit("getAllList", {
         listContact: user.listContacts,
         listGroups: user.listGroups,

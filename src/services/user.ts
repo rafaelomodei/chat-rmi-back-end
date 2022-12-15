@@ -31,11 +31,13 @@ export default class ServiceUser {
     const { password, ...user } = data;
 
     var passwordTemp = this.hashProvider.generate(password);
-
+    console.log(data);
     UsersData.push({
       id: `${UsersData.length + 1}`,
       ...user,
       password: passwordTemp,
+      listContacts: [],
+      listGroups: []
     });
 
     return {
@@ -91,26 +93,20 @@ export default class ServiceUser {
   };
 
   public insertContact = (data: IDataRegContact) => {
-    const user = this.findUserByEmail(data.userEmail);
-
+    const user = this.findUserByEmail(data.userAuth);
     const contact = user.listContacts?.filter(
       (item) => item.address === data.address
-    )[0];
-    if (contact) {
-      return {
-        status: 409,
+      )[0];
+      if (contact) {
+        return {
+          status: 409,
         error: "Contact already exists in list",
         message: "",
       };
     }
     var { userEmail, ...contactNew } = data;
-
-    user.listContacts?.push(contactNew);
-
-    var userLi = user.listContacts?.filter(
-      (item) => contactNew.name === item.name
-    );
-
+    user.listContacts?.push({...contactNew});
+    
     return {
       status: 200,
       message: "Contact save your list",

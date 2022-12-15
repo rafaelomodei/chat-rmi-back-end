@@ -13,6 +13,7 @@ export interface IDataRegister {
 
 export interface IDataRegContact extends IContacts {
   userEmail: string;
+  userAuth: string;
 }
 
 export interface IDataRegGroup extends IGroups {

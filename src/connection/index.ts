@@ -52,7 +52,11 @@ const connection = server.ioConnection.on("connection", (socket) => {
         });
       } else {
         // if userFound
-        socket.emit("login");
+        socket.emit("login", {
+          status: 200,
+          message: "User logged",
+          error: "",
+        });
       }
     }
   });

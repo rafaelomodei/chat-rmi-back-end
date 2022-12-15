@@ -81,19 +81,12 @@ export default class ServiceUser {
 
   public findUserByEmail = (email: string) => {
     const data = UsersData.filter((user) => user.email === email)[0];
-    if (!data) {
-      throw new Error(`User with email ${email} not found`);
-    }
 
     return data;
   };
 
   public findUserByUsername = (name: string) => {
     const data = UsersData.filter((user) => user.name === name)[0];
-    if (!data) {
-      throw new Error(`User with name ${name} not found`);
-    }
-
     return data;
   };
 
